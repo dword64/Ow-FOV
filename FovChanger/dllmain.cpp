@@ -1,10 +1,4 @@
 ﻿#pragma once
-#include <fstream>
-#include <Windows.h>
-#include <iostream>
-#include <thread>
-#include <TlHelp32.h>
-#include <vector>
 #include "GetModule.h"
 #include "OffsetAddress.h"
 #include "config.h"
