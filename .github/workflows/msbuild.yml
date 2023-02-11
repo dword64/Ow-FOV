@@ -21,7 +21,7 @@ jobs:
     - name: Check for changes in FovChanger folder
       run: |
         CHANGED_FILES=$(git diff origin/main --name-only)
-        if echo "$CHANGED_FILES" | grep -E "^FovChanger/"; then
+        if (echo "$CHANGED_FILES" | grep -E "^FovChanger/"); then
         else
           exit 0
         fi
