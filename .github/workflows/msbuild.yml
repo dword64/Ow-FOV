@@ -33,6 +33,13 @@ jobs:
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Set body text
+      run: |
+        if [ "${{github.event.head_commit.message}}" == "" ]; then
+          echo "::set-env name=BODY_TEXT::Commit ID: ${{github.sha}}"
+        else
+          echo "::set-env name=BODY_TEXT::${{github.event.head_commit.message}}"
       
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -41,6 +48,6 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: false
         title: "New Release!"
-        body: $(if [ "${{github.event.head_commit.message}}" == "" ]; then echo "Commit ID: ${{github.sha}}"; else echo "${{github.event.head_commit.message}}"; fi
+        body: ${{ env.BODY_TEXT }}
         files: | 
           x64/Release/FovChanger.dll
