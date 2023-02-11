@@ -20,13 +20,12 @@ jobs:
 
     - name: Check for changes in FovChanger folder
       run: |
-        CHANGED_FILES=$(curl -Ls "$GITHUB_EVENT_PATH/diff" | grep -E "^[+-]{3} b/([^[:space:]]+)" | awk '{print $2}')
-        if echo "$CHANGED_FILES" | grep -E "^FovChanger/"; then
-          CHANGED_FOV_FILES=$(echo "$CHANGED_FILES" | grep -E "^FovChanger/")
-        else
-          echo "No changes were made in the FovChanger folder. Exiting."
+        $CHANGED_FILES = (Invoke-WebRequest -Uri "$env:GITHUB_EVENT_PATH/diff" -UseBasicParsing).Content | Select-String "^[+-]{3} b/([^[:space:]]+)"
+        $CHANGED_FOV_FILES = ($CHANGED_FILES | Select-String "^FovChanger/") -join ""
+        if ($CHANGED_FOV_FILES -eq "") {
+          Write-Host "No changes were made in the FovChanger folder. Exiting."
           exit 0
-        fi
+        }
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
@@ -34,21 +33,14 @@ jobs:
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-
-    - name: Set body text
-      run: |
-        if [ "${{github.event.head_commit.message}}" == "" ]; then
-          echo "::set-env name=BODY_TEXT::Commit ID: ${{github.sha}}"
-        else
-          echo "::set-env name=BODY_TEXT::${{github.event.head_commit.message}}"
       
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"
-      with: 
+      with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         automatic_release_tag: "latest"
         prerelease: false
         title: "New Release!"
-        body: ${{ env.BODY_TEXT }}
+        body: $(if (${{github.event.head_commit.message}} -eq "") { "Commit ID: ${{github.sha}}" } else { ${{github.event.head_commit.message}} })
         files: | 
           x64/Release/FovChanger.dll
