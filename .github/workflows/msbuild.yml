@@ -41,6 +41,6 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: false
         title: "New Release!"
-        body: $(if (${{github.event.head_commit.message}} -eq "") { "Commit ID: ${{github.sha}}" } else { ${{github.event.head_commit.message}} })
+        body: $(if ([string]::IsNullOrEmpty(${{github.event.head_commit.message}})) { "Commit ID: ${{github.sha}}" } else { ${{github.event.head_commit.message}} })
         files: | 
           x64/Release/FovChanger.dll
