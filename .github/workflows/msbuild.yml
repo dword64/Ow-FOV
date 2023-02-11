@@ -18,9 +18,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+     - name: Get changed files
+      id: changed_files
+      run: |
+        $CHANGED_FILES = $(curl -LJO "#${{ env.GITHUB_EVENT_PATH }}/diff") | Select-String "^[+-]{3} b/([^[:space:]]+)"
+
     - name: Check for changes in FovChanger folder
       run: |
-        $CHANGED_FILES = (Invoke-WebRequest -Uri "$env:GITHUB_EVENT_PATH/diff" -UseBasicParsing).Content | Select-String "^[+-]{3} b/([^[:space:]]+)"
         $CHANGED_FOV_FILES = ($CHANGED_FILES | Select-String "^FovChanger/") -join ""
         if ($CHANGED_FOV_FILES -eq "") {
           Write-Host "No changes were made in the FovChanger folder. Exiting."
