@@ -8,8 +8,8 @@ Some players prefer to have a wider field of view in games for a more immersive 
 
 ## How to Use ?
 
-1. Download the tool from the release site.
-2. Execute the batch file.
+1. Download the DLL from the release site.
+2. Use a Injector of your choice!
 3. Start up Overwatch and enjoy the increased FOV!
 
 **Note:** `If you build the project yourself, it is recommended to use the same injector as the one used in the batch file or any injector of your choice.`
