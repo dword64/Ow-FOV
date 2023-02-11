@@ -77,7 +77,7 @@ namespace window
 #pragma endregion
 
 		ImGui::SetNextWindowSize(ImVec2(400, 100));
-		ImGui::Begin("FovChanger (Menu Key: Insert)", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings);
+		ImGui::Begin("FovChanger (Menu Key: Insert) :)", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings);
 
 		ImGui::SliderFloat("FOV", &settings::fov_setting, 1, 179, "%1.f");
 		ImGui::End();
