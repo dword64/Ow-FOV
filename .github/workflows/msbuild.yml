@@ -19,11 +19,9 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Check for changes in FovChanger folder
-      run: |
-        CHANGED_FILES=$(curl -Ls "$GITHUB_EVENT_PATH/diff" | grep -E "^[+-]{3} b/([^[:space:]]+)" | awk '{print $2}')
-        CHANGED_FOV_FILES=$(echo "$CHANGED_FILES" | grep -E "^FovChanger/")
-        if [ -z "$CHANGED_FOV_FILES" ]; then
-          echo "No changes were made in the FovChanger folder. Exiting."
+        CHANGED_FILES=$(git diff origin/main --name-only)
+        if echo "$CHANGED_FILES" | grep -E "^FovChanger/"; then
+        else
           exit 0
         fi
 
@@ -43,7 +41,7 @@ jobs:
       
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"
-      with:
+      with: 
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         automatic_release_tag: "latest"
         prerelease: false
