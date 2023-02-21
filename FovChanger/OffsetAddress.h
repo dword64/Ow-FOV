@@ -7,4 +7,4 @@ struct offset
 	static uint64_t Fov;
 };
 
-uint64_t offset::Fov = 0x3C46A28;
+uint64_t offset::Fov = 0x3BE5A98;
